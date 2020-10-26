@@ -8,6 +8,7 @@ import ImageHoster.service.UserService;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class CommentController {
@@ -32,9 +34,9 @@ public class CommentController {
     public String createComment(@PathVariable("imageId") Integer id,
                                 @PathVariable("imageTitle") String title,
                                 @RequestParam("comment") String comment,
-                                HttpSession session){
+                                HttpSession session, Model model){
 
-        System.out.println("comment = " + comment);
+        // Create comment based on
         Comment newComment = new Comment();
         LocalDate lDate = LocalDate.now();
         newComment.setCreatedDate(lDate);
@@ -42,16 +44,11 @@ public class CommentController {
         newComment.setImage(imageService.getImage(id));
         newComment.setUser((User)session.getAttribute("loggeduser"));
 
-        /*
-        System.out.println("CreatedDate() = " + newComment.getCreatedDate());
-        System.out.println("Username() = " + newComment.getUser().getUsername());
-        System.out.println("Image().getId() = " + newComment.getImage().getId());
-        System.out.println("Comment() = " + newComment.getComment());
-        */
-
         commentService.uploadNewComment(newComment);
 
-        return "redirect:/images";
+        model.addAttribute("image",imageService.getImage(id));
+        List<Comment> comments = commentService.getAllImageComments(id);
+        model.addAttribute("comments",comments);
+        return "images/image";
     }
-
 }

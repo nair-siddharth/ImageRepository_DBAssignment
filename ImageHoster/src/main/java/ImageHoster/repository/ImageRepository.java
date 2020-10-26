@@ -46,9 +46,10 @@ public class ImageRepository {
         return resultList;
     }
 
+    // returns all images uploaded by a user with id
     public List<Image> getAllUserImages(Integer id) {
         EntityManager em = emf.createEntityManager();
-        TypedQuery<Image> query = em.createQuery("SELECT i from Image i where user_id = "+id, Image.class);
+        TypedQuery<Image> query = em.createQuery("SELECT i from Image i where i.user = "+id, Image.class);
         List<Image> resultList = query.getResultList();
 
         return resultList;
