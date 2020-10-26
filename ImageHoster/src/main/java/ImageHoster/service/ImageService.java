@@ -27,8 +27,8 @@ public class ImageService {
 
 
     //The method calls the getImageByTitle() method in the Repository and passes the title of the image to be fetched
-    public Image getImageByTitle(String id) {
-        return imageRepository.getImageByTitle(id);
+    public Image getImageByID(Integer id) {
+        return imageRepository.getImageByID(id);
     }
 
     //The method calls the getImage() method in the Repository and passes the id of the image to be fetched

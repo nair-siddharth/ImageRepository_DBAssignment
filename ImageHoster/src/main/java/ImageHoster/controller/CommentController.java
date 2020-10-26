@@ -36,7 +36,7 @@ public class CommentController {
                                 @RequestParam("comment") String comment,
                                 HttpSession session, Model model){
 
-        // Create comment based on
+        // Create comment object
         Comment newComment = new Comment();
         LocalDate lDate = LocalDate.now();
         newComment.setCreatedDate(lDate);
@@ -44,8 +44,10 @@ public class CommentController {
         newComment.setImage(imageService.getImage(id));
         newComment.setUser((User)session.getAttribute("loggeduser"));
 
+        // persist comment
         commentService.uploadNewComment(newComment);
 
+        // set attributes required in image.html
         model.addAttribute("image",imageService.getImage(id));
         List<Comment> comments = commentService.getAllImageComments(id);
         model.addAttribute("comments",comments);
